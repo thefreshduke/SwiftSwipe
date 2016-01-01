@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "4786266CA8E28ECD1B81D7AB28ADB06810A5423C",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "4786266CA8E28ECD1B81D7AB28ADB06810A5423C" : 0,
+    "4A762B727C72E1EAA39EAEA3996B9BD9367C15B4" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "FF161924-A7E2-4967-84CC-B1D0D2AF6CDF",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "4786266CA8E28ECD1B81D7AB28ADB06810A5423C" : "SwiftSwipe\/",
+    "4A762B727C72E1EAA39EAEA3996B9BD9367C15B4" : ""
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "SwiftSwipe",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "SwiftSwipe.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:thefreshduke\/SwiftSwipe.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "4786266CA8E28ECD1B81D7AB28ADB06810A5423C"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:thefreshduke\/PrimeNumberTutorial.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "4A762B727C72E1EAA39EAEA3996B9BD9367C15B4"
+    }
+  ]
+}

@@ -23,12 +23,21 @@
                                     <constraint firstAttribute="width" constant="150" id="a9h-K4-Q4O"/>
                                 </constraints>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4cy-jg-tNY">
+                                <rect key="frame" x="277" y="469" width="46" height="30"/>
+                                <state key="normal" title="Button"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="xhs-VC-Bv1" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="3z0-gv-ned"/>
                             <constraint firstItem="xhs-VC-Bv1" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="rsK-R4-Vb5"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="4cy-jg-tNY"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="image" destination="xhs-VC-Bv1" id="PcJ-aO-rVI"/>
@@ -37,6 +46,46 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="242" y="339"/>
+        </scene>
+        <!--SuccessViewController-->
+        <scene sceneID="Xcn-6h-n0e">
+            <objects>
+                <viewController storyboardIdentifier="SuccessViewController" title="SuccessViewController" id="PsC-MZ-WL6" customClass="SuccessViewController" customModule="SwiftSwipe" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Hya-fz-qI9"/>
+                        <viewControllerLayoutGuide type="bottom" id="9nY-oi-tv3"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="2Yz-2e-ji0">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kxm-OY-gZi">
+                                <rect key="frame" x="280" y="285" width="40" height="30"/>
+                                <state key="normal" title="BACK"/>
+                                <connections>
+                                    <action selector="loadBubbleViewController:" destination="PsC-MZ-WL6" eventType="touchUpInside" id="EWh-LF-GWF"/>
+                                    <segue destination="BYZ-38-t0r" kind="show" id="LyB-On-IDP"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SUCCESS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iJD-Eq-ZT3">
+                                <rect key="frame" x="262" y="217" width="77" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="kxm-OY-gZi" firstAttribute="centerY" secondItem="2Yz-2e-ji0" secondAttribute="centerY" id="1co-ra-D5I"/>
+                            <constraint firstItem="kxm-OY-gZi" firstAttribute="centerX" secondItem="2Yz-2e-ji0" secondAttribute="centerX" id="Blu-fq-Ost"/>
+                            <constraint firstItem="kxm-OY-gZi" firstAttribute="top" secondItem="iJD-Eq-ZT3" secondAttribute="bottom" constant="47" id="UoG-h2-f0R"/>
+                            <constraint firstItem="iJD-Eq-ZT3" firstAttribute="centerX" secondItem="2Yz-2e-ji0" secondAttribute="centerX" id="aKa-yX-yJg"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6Ft-2B-ydl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1004" y="339"/>
         </scene>
     </scenes>
     <resources>

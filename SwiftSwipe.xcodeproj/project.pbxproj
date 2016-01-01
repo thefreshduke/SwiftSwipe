@@ -13,6 +13,7 @@
 		6F12044F1C33484F0036761E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6F12044E1C33484F0036761E /* Assets.xcassets */; };
 		6F1204521C33484F0036761E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6F1204501C33484F0036761E /* LaunchScreen.storyboard */; };
 		6F12045A1C334D9F0036761E /* pointerCircle.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F1204591C334D9F0036761E /* pointerCircle.png */; settings = {ASSET_TAGS = (); }; };
+		6F1204681C33BDC90036761E /* SuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F1204671C33BDC90036761E /* SuccessViewController.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		6F1204511C33484F0036761E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6F1204531C33484F0036761E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6F1204591C334D9F0036761E /* pointerCircle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pointerCircle.png; path = ../../../pointerCircle.png; sourceTree = "<group>"; };
+		6F1204671C33BDC90036761E /* SuccessViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuccessViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +61,7 @@
 				6F1204471C33484F0036761E /* AppDelegate.swift */,
 				6F1204491C33484F0036761E /* ViewController.swift */,
 				6F12044B1C33484F0036761E /* Main.storyboard */,
+				6F1204671C33BDC90036761E /* SuccessViewController.swift */,
 				6F12044E1C33484F0036761E /* Assets.xcassets */,
 				6F1204501C33484F0036761E /* LaunchScreen.storyboard */,
 				6F1204531C33484F0036761E /* Info.plist */,
@@ -139,6 +142,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F12044A1C33484F0036761E /* ViewController.swift in Sources */,
+				6F1204681C33BDC90036761E /* SuccessViewController.swift in Sources */,
 				6F1204481C33484F0036761E /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
