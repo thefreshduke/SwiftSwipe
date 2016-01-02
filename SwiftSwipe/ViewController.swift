@@ -14,8 +14,6 @@ class ViewController: UIViewController {
     let deviceWidth: CGFloat = UIScreen.mainScreen().bounds.size.width
     let deviceHeight: CGFloat = UIScreen.mainScreen().bounds.size.height
     
-    let midpointX: CGFloat = UIScreen.mainScreen().bounds.size.width / 2
-    let midpointY: CGFloat = UIScreen.mainScreen().bounds.size.height / 2
     let midpoint: CGPoint = CGPoint(x: UIScreen.mainScreen().bounds.size.width / 2, y: UIScreen.mainScreen().bounds.size.height / 2)
     
     @IBOutlet weak var image: UIImageView!
@@ -23,8 +21,11 @@ class ViewController: UIViewController {
     var imageWidth: CGFloat = 0.0
     var imageHeight: CGFloat = 0.0
     
-    var xOffset: CGFloat = 0.0
-    var yOffset: CGFloat = 0.0
+    var xTouchOffset: CGFloat = 0.0
+    var yTouchOffset: CGFloat = 0.0
+    
+    var maximumAllowedOffset: CGFloat = 0.0
+    var bubbleReleaseBorderRadius: CGFloat = 0.0
     
 //    var lastTouch : UITouch!
     var originX: CGFloat!
@@ -38,6 +39,10 @@ class ViewController: UIViewController {
         
         imageWidth = image.frame.width
         imageHeight = image.frame.height
+        
+        maximumAllowedOffset = imageWidth / 3
+        
+        bubbleReleaseBorderRadius = imageWidth * 2
         
         originX = (deviceWidth - imageWidth) / 2
         originY = (deviceHeight - imageHeight) / 2
@@ -54,9 +59,10 @@ class ViewController: UIViewController {
         let startY = touch!.locationInView(self.view).y
         let touchPoint = CGPoint(x: startX, y: startY)
         
-        let distanceOfTouchFromMidpoint = calculateDistanceFrom(midpoint, to: touchPoint)
+        (xTouchOffset, yTouchOffset) = calculateScalarDistancesFrom(midpoint, to: touchPoint)
+        let distanceOfTouchFromMidpoint = calculateVectorDistanceUsing(xTouchOffset, and: yTouchOffset)
         
-        if (distanceOfTouchFromMidpoint <= imageWidth / 3) {
+        if (distanceOfTouchFromMidpoint <= maximumAllowedOffset) {
             isTouchValid = true
             self.view.backgroundColor = UIColor.greenColor()
             super.touchesBegan(touches, withEvent: event)
@@ -68,21 +74,32 @@ class ViewController: UIViewController {
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         let touch = touches.first
-        let endX = touch!.locationInView(self.view).x
-        let endY = touch!.locationInView(self.view).y
-        
-        print("------------\(endX), \(endY)------------")
-        print("")
-        
-        // instead of snapping back to midpoint, calculate velocity and send bubble off-screen
-        image.frame = CGRect(x: originX, y: originY, width: imageWidth, height: imageHeight)
         
         if (isTouchValid) {
-            let successViewController = self.storyboard!.instantiateViewControllerWithIdentifier("SuccessViewController") as! SuccessViewController
-            self.presentViewController(successViewController, animated: true, completion: nil)
+            let endX = touch!.locationInView(self.view).x
+            let endY = touch!.locationInView(self.view).y
+            let bubbleEndPosition = CGPoint(x: endX + xTouchOffset, y: endY + yTouchOffset)
+            let bubbleVectorDistanceMoved = calculateVectorDistanceFrom(midpoint, to: bubbleEndPosition)
+            
+            print(bubbleVectorDistanceMoved)
+            print(bubbleReleaseBorderRadius)
+            
+            
+            if (bubbleVectorDistanceMoved >= bubbleReleaseBorderRadius) {
+                
+                // calculate velocity and send bubble off-screen
+                
+                let successViewController = self.storyboard!.instantiateViewControllerWithIdentifier("SuccessViewController") as! SuccessViewController
+                self.presentViewController(successViewController, animated: true, completion: nil)
+            }
+            else {
+                image.frame = CGRect(x: originX, y: originY, width: imageWidth, height: imageHeight)
+            }
+        }
+        else {
+            self.view.backgroundColor = UIColor.whiteColor()
         }
         
-        self.view.backgroundColor = UIColor.whiteColor()
         isTouchValid = false
         
         super.touchesEnded(touches, withEvent: event)
@@ -94,12 +111,10 @@ class ViewController: UIViewController {
             let movingX = touch!.locationInView(self.view).x
             let movingY = touch!.locationInView(self.view).y
             
-            print("\(movingX), \(movingY)")
-            
             //        lastTouch = touch
             
-            let newX = movingX - xOffset - imageWidth / 2
-            let newY = movingY - yOffset - imageHeight / 2
+            let newX = movingX - xTouchOffset - imageWidth / 2
+            let newY = movingY - yTouchOffset - imageHeight / 2
             
             image.frame = CGRect(x: newX, y: newY, width: imageWidth, height: imageHeight)
             
@@ -107,13 +122,25 @@ class ViewController: UIViewController {
         }
     }
     
-    func calculateDistanceFrom(point1: CGPoint, to point2: CGPoint) -> CGFloat {
-        xOffset = point2.x - point1.x
-        yOffset = point2.y - point1.y
+    func calculateScalarDistancesFrom(point1: CGPoint, to point2: CGPoint) -> (CGFloat, CGFloat) {
+        let xDistance = point2.x - point1.x
+        let yDistance = point2.y - point1.y
         
-        let xDifferenceSquared = pow(xOffset, CGFloat(2))
-        let yDifferenceSquared = pow(yOffset, CGFloat(2))
+        return (xDistance, yDistance)
+    }
+    
+    func calculateVectorDistanceUsing(scalar1: CGFloat, and scalar2: CGFloat) -> CGFloat {
+        let aSquared = pow(scalar1, CGFloat(2))
+        let bSquared = pow(scalar2, CGFloat(2))
         
-        return sqrt(xDifferenceSquared + yDifferenceSquared)
+        return sqrt(aSquared + bSquared)
+    }
+    
+    func calculateVectorDistanceFrom(point1: CGPoint, to point2: CGPoint) -> CGFloat {
+        let (xDistance, yDistance) = calculateScalarDistancesFrom(point1, to: point2)
+        
+        let vectorDistance = calculateVectorDistanceUsing(xDistance, and: yDistance)
+        
+        return vectorDistance
     }
 }
