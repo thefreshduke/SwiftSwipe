@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import CoreLocation
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, CLLocationManagerDelegate {
     
     let deviceSize: CGSize = UIScreen.mainScreen().bounds.size
     let deviceWidth: CGFloat = UIScreen.mainScreen().bounds.size.width
@@ -17,6 +18,8 @@ class ViewController: UIViewController {
     let midpoint: CGPoint = CGPoint(x: UIScreen.mainScreen().bounds.size.width / 2, y: UIScreen.mainScreen().bounds.size.height / 2)
     
     @IBOutlet weak var image: UIImageView!
+    
+    var locationManager: CLLocationManager!
     
     var imageWidth: CGFloat = 0.0
     var imageHeight: CGFloat = 0.0
@@ -27,7 +30,7 @@ class ViewController: UIViewController {
     var maximumAllowedOffset: CGFloat = 0.0
     var bubbleReleaseBorderRadius: CGFloat = 0.0
     
-//    var lastTouch : UITouch!
+    var lastMovingTouch: UITouch!
     var originX: CGFloat!
     var originY: CGFloat!
     
@@ -37,12 +40,16 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        locationManager.startUpdatingHeading()
+        
         imageWidth = image.frame.width
         imageHeight = image.frame.height
         
         maximumAllowedOffset = imageWidth / 3
         
-        bubbleReleaseBorderRadius = imageWidth * 2
+        bubbleReleaseBorderRadius = imageWidth
         
         originX = (deviceWidth - imageWidth) / 2
         originY = (deviceHeight - imageHeight) / 2
@@ -52,6 +59,12 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    /**
+    *
+    * TOUCH AND INTERACTION
+    *
+    **/
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         let touch = touches.first
@@ -72,18 +85,44 @@ class ViewController: UIViewController {
         }
     }
     
+    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        
+        for touch in touches {
+            print("\(touch.locationInView(self.view))")
+        }
+        
+        if (isTouchValid) {
+            lastMovingTouch = touches.first
+            
+            let touch = touches.first
+            let movingX = touch!.locationInView(self.view).x
+            let movingY = touch!.locationInView(self.view).y
+            
+            let newX = movingX - xTouchOffset - imageWidth / 2
+            let newY = movingY - yTouchOffset - imageHeight / 2
+            
+            image.frame = CGRect(x: newX, y: newY, width: imageWidth, height: imageHeight)
+            
+            super.touchesMoved(touches, withEvent: event)
+        }
+    }
+    
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        
+        print("---------------------")
+        
         let touch = touches.first
         
         if (isTouchValid) {
+            let lastTouch = touches.first
+            
             let endX = touch!.locationInView(self.view).x
             let endY = touch!.locationInView(self.view).y
             let bubbleEndPosition = CGPoint(x: endX + xTouchOffset, y: endY + yTouchOffset)
             let bubbleVectorDistanceMoved = calculateVectorDistanceFrom(midpoint, to: bubbleEndPosition)
             
-            print(bubbleVectorDistanceMoved)
-            print(bubbleReleaseBorderRadius)
-            
+//            print(bubbleVectorDistanceMoved)
+//            print(bubbleReleaseBorderRadius)
             
             if (bubbleVectorDistanceMoved >= bubbleReleaseBorderRadius) {
                 
@@ -96,51 +135,48 @@ class ViewController: UIViewController {
                 image.frame = CGRect(x: originX, y: originY, width: imageWidth, height: imageHeight)
             }
         }
-        else {
-            self.view.backgroundColor = UIColor.whiteColor()
-        }
+        
+        // reset to pre-touch conditions
+        
+        self.view.backgroundColor = UIColor.whiteColor()
         
         isTouchValid = false
         
         super.touchesEnded(touches, withEvent: event)
     }
     
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        if (isTouchValid) {
-            let touch = touches.first
-            let movingX = touch!.locationInView(self.view).x
-            let movingY = touch!.locationInView(self.view).y
-            
-            //        lastTouch = touch
-            
-            let newX = movingX - xTouchOffset - imageWidth / 2
-            let newY = movingY - yTouchOffset - imageHeight / 2
-            
-            image.frame = CGRect(x: newX, y: newY, width: imageWidth, height: imageHeight)
-            
-            super.touchesMoved(touches, withEvent: event)
-        }
-    }
+    /**
+    * 
+    * GEOMETRY AND PHYSICS CALCULATIONS
+    *
+    **/
     
-    func calculateScalarDistancesFrom(point1: CGPoint, to point2: CGPoint) -> (CGFloat, CGFloat) {
+    private func calculateScalarDistancesFrom(point1: CGPoint, to point2: CGPoint) -> (CGFloat, CGFloat) {
         let xDistance = point2.x - point1.x
         let yDistance = point2.y - point1.y
         
         return (xDistance, yDistance)
     }
     
-    func calculateVectorDistanceUsing(scalar1: CGFloat, and scalar2: CGFloat) -> CGFloat {
+    private func calculateVectorDistanceUsing(scalar1: CGFloat, and scalar2: CGFloat) -> CGFloat {
         let aSquared = pow(scalar1, CGFloat(2))
         let bSquared = pow(scalar2, CGFloat(2))
         
         return sqrt(aSquared + bSquared)
     }
     
-    func calculateVectorDistanceFrom(point1: CGPoint, to point2: CGPoint) -> CGFloat {
+    private func calculateVectorDistanceFrom(point1: CGPoint, to point2: CGPoint) -> CGFloat {
         let (xDistance, yDistance) = calculateScalarDistancesFrom(point1, to: point2)
-        
         let vectorDistance = calculateVectorDistanceUsing(xDistance, and: yDistance)
         
         return vectorDistance
+    }
+    
+    func calculateBubbleVelocity(point1: CGPoint, to point2: CGPoint) -> (CGFloat, CGFloat) {
+        return calculateScalarDistancesFrom(point1, to: point2)
+    }
+    
+    func locationManager(manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        print(newHeading.magneticHeading)
     }
 }
