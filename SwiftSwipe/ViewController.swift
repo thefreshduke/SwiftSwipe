@@ -36,6 +36,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     var isTouchValid: Bool = false
     
+//    var currentBackgroundColor: UIColor!
+    
 //    var startTime = NSTimeInterval()
 //    var timer = NSTimer()
 
@@ -51,12 +53,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         imageWidth = image.frame.width
         imageHeight = image.frame.height
         
+//        print(deviceWidth / 2)
+//        print(deviceHeight / 2)
+        
         maximumAllowedOffset = imageWidth / 3
         
         bubbleReleaseBorderRadius = imageWidth
         
         originX = (deviceWidth - imageWidth) / 2
         originY = (deviceHeight - imageHeight) / 2
+        
+//        currentBackgroundColor = self.view.backgroundColor
     }
 
     override func didReceiveMemoryWarning() {
@@ -81,31 +88,43 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         if (distanceOfTouchFromMidpoint <= maximumAllowedOffset) {
             isTouchValid = true
-            self.view.backgroundColor = UIColor.greenColor()
+            self.view.backgroundColor = UIColor.whiteColor()
+//            currentBackgroundColor = UIColor.cyanColor()
             super.touchesBegan(touches, withEvent: event)
         }
         else {
             self.view.backgroundColor = UIColor.redColor()
+//            currentBackgroundColor = UIColor.redColor()
         }
     }
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
         
-//        for touch in touches {
-//            print("\(touch.locationInView(self.view))")
-//        }
+        let touch = touches.first
         
         if (isTouchValid) {
             lastMovingTouch = touches.first
             
-            let touch = touches.first
-            let movingX = touch!.locationInView(self.view).x
-            let movingY = touch!.locationInView(self.view).y
+            let currentX = touch!.locationInView(self.view).x - xTouchOffset
+            let currentY = touch!.locationInView(self.view).y - yTouchOffset
+            let bubbleMovingPosition = CGPoint(x: currentX, y: currentY)
+            let bubbleVectorDistanceMoved = calculateVectorDistanceFrom(midpoint, to: bubbleMovingPosition)
             
-            let newX = movingX - xTouchOffset - imageWidth / 2
-            let newY = movingY - yTouchOffset - imageHeight / 2
+            if (bubbleVectorDistanceMoved >= bubbleReleaseBorderRadius) {
+                self.view.backgroundColor = UIColor.greenColor()
+            }
+            else {
+                self.view.backgroundColor = UIColor.whiteColor()
+            }
             
-            image.frame = CGRect(x: newX, y: newY, width: imageWidth, height: imageHeight)
+//            self.view.backgroundColor = currentBackgroundColor
+            
+            let newImageX = currentX - imageWidth / 2
+            let newImageY = currentY - imageHeight / 2
+            
+            image.frame = CGRect(x: newImageX, y: newImageY, width: imageWidth, height: imageHeight)
+            
+//            print("\(newX), \(newY)")
             
             super.touchesMoved(touches, withEvent: event)
         }
@@ -113,17 +132,18 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         
-//        print("---------------------")
-        
         let touch = touches.first
         
         if (isTouchValid) {
             let lastTouch = touches.first
             
-            let endX = touch!.locationInView(self.view).x
-            let endY = touch!.locationInView(self.view).y
-            let bubbleEndPosition = CGPoint(x: endX + xTouchOffset, y: endY + yTouchOffset)
+            let endX = touch!.locationInView(self.view).x - xTouchOffset
+            let endY = touch!.locationInView(self.view).y - yTouchOffset
+            let bubbleEndPosition = CGPoint(x: endX, y: endY)
             let bubbleVectorDistanceMoved = calculateVectorDistanceFrom(midpoint, to: bubbleEndPosition)
+            
+//            print(bubbleEndPosition)
+//            print("------------------")
             
 //            print(bubbleVectorDistanceMoved)
 //            print(bubbleReleaseBorderRadius)
@@ -143,6 +163,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         // reset to pre-touch conditions
         
         self.view.backgroundColor = UIColor.whiteColor()
+//        currentBackgroundColor = UIColor.whiteColor()
         
         isTouchValid = false
         
@@ -177,7 +198,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     func calculateBubbleVelocity(point1: CGPoint, to point2: CGPoint) -> (CGFloat, CGFloat) {
-        print("bubble")
+//        print("bubble")
         return calculateScalarDistancesFrom(point1, to: point2)
     }
     
