@@ -35,6 +35,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     var originY: CGFloat!
     
     var isTouchValid: Bool = false
+    
+//    var startTime = NSTimeInterval()
+//    var timer = NSTimer()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +45,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         locationManager = CLLocationManager()
         locationManager.delegate = self
+        locationManager.headingFilter = kCLHeadingFilterNone
         locationManager.startUpdatingHeading()
         
         imageWidth = image.frame.width
@@ -87,9 +91,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
         
-        for touch in touches {
-            print("\(touch.locationInView(self.view))")
-        }
+//        for touch in touches {
+//            print("\(touch.locationInView(self.view))")
+//        }
         
         if (isTouchValid) {
             lastMovingTouch = touches.first
@@ -109,7 +113,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         
-        print("---------------------")
+//        print("---------------------")
         
         let touch = touches.first
         
@@ -173,10 +177,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     func calculateBubbleVelocity(point1: CGPoint, to point2: CGPoint) -> (CGFloat, CGFloat) {
+        print("bubble")
         return calculateScalarDistancesFrom(point1, to: point2)
     }
     
     func locationManager(manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
-        print(newHeading.magneticHeading)
+        print("Mag Heading: \(newHeading.magneticHeading)")
+        print("True Heading: \(newHeading.trueHeading)")
     }
 }
