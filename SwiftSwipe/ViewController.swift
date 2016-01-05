@@ -36,6 +36,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     var isTouchValid: Bool = false
     
+    var bubbleXVelocity: CGFloat! = 0.0
+    var bubbleYVelocity: CGFloat! = 0.0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -129,10 +132,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             
             let finalTouchPoint = finalTouch?.locationInView(self.view)
             
-            var (xVelocity, yVelocity): (CGFloat, CGFloat)
-            
             if (lastMovingTouchLocation != nil) {
-                (xVelocity, yVelocity) = calculateScalarDistancesFrom(lastMovingTouchLocation, to: finalTouchPoint!)
+                let (xVelocity, yVelocity) = calculateScalarDistancesFrom(lastMovingTouchLocation, to: finalTouchPoint!)
+                
+                (bubbleXVelocity, bubbleYVelocity) = (xVelocity, yVelocity)
+                
                 let bubbleVelocity = calculateVectorDistanceUsing(xVelocity, and: yVelocity)
                 
                 if (bubbleVectorDistanceMoved >= bubbleReleaseBorderRadius && bubbleVelocity > 0) {
@@ -220,6 +224,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     func calculateBubbleVelocity(point1: CGPoint, to point2: CGPoint) -> (CGFloat, CGFloat) {
         return calculateScalarDistancesFrom(point1, to: point2)
+    }
+    
+    func getBubbleScalarVelocities() -> (CGFloat, CGFloat) {
+        return (bubbleXVelocity, bubbleYVelocity)
     }
     
     func locationManager(manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
