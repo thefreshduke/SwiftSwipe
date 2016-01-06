@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+import Darwin
 
 class ViewController: UIViewController, CLLocationManagerDelegate {
     
@@ -16,6 +17,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     let deviceHeight: CGFloat = UIScreen.mainScreen().bounds.size.height
     
     let midpoint: CGPoint = CGPoint(x: UIScreen.mainScreen().bounds.size.width / 2, y: UIScreen.mainScreen().bounds.size.height / 2)
+    
+    let π: Double! = M_PI
     
     @IBOutlet weak var image: UIImageView!
     
@@ -38,6 +41,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     var bubbleXVelocity: CGFloat! = 0.0
     var bubbleYVelocity: CGFloat! = 0.0
+    
+    var trueNorth: CLLocationDirection!
+    var geographicBubbleSwipeHeading: CLLocationDirection!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -147,6 +153,49 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                     
                     moveBubble(bubblePosition, withScalarVelocities: xVelocity, and: yVelocity)
                     
+//                    let bubbleSwipeHeadingRadians = CLLocationDirection(atan(bubbleXVelocity / bubbleYVelocity))
+                    
+//                    print("")
+//                    print("\(finalTouchPoint!.y), \(finalTouchPoint!.x)")
+//                    print("\(midpoint.y), \(midpoint.x)")
+                    
+                    let opposite = midpoint.y - finalTouchPoint!.y
+                    let adjacent = finalTouchPoint!.x - midpoint.x
+                    
+                    var relativeBubbleSwipeHeading: CLLocationDirection!
+                    
+//                    print("y: \(opposite), x: \(adjacent)")
+//                    print("\((opposite) / (adjacent))")
+//                    print("\(atan(opposite / adjacent))")
+//                    print("\(90 + 180 / π * Double(atan(opposite / adjacent)))")
+//                    print("")
+                    
+                    if (adjacent == 0.0) {
+                        if (opposite == 1.0) {
+                            relativeBubbleSwipeHeading = 0.0
+                        }
+                        else {
+                            relativeBubbleSwipeHeading = 180.0
+                        }
+                    }
+                    else {
+                        let bubbleSwipeHeadingRadians = CLLocationDirection(atan(opposite / adjacent))
+                        relativeBubbleSwipeHeading = 90 + 180 * bubbleSwipeHeadingRadians / π
+                        if (adjacent > 0.0) {
+                            relativeBubbleSwipeHeading = relativeBubbleSwipeHeading + CLLocationDirection(180.0)
+                        }
+                    }
+                    
+//                    print("")
+//                    print("bubbleSwipeHeading: \((bubbleSwipeHeading + trueNorth) % 360.0)")
+                    
+//                    print("True North: \(trueNorth)")
+//                    print("Bubble Heading: \(bubbleSwipeHeading)")
+                    
+//                    print("Bubble Direction: \((360 + trueNorth - bubbleSwipeHeading) % 360)")
+                    
+                    geographicBubbleSwipeHeading = (360 + trueNorth - relativeBubbleSwipeHeading) % 360
+                    
                     let successViewController = self.storyboard!.instantiateViewControllerWithIdentifier("SuccessViewController") as! SuccessViewController
                     self.presentViewController(successViewController, animated: true, completion: {
                         self.view.backgroundColor = UIColor.whiteColor()
@@ -226,12 +275,31 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         return calculateScalarDistancesFrom(point1, to: point2)
     }
     
-    func getBubbleScalarVelocities() -> (CGFloat, CGFloat) {
+    func getBubbleXVelocityAndBubbleYVelocity() -> (CGFloat, CGFloat) {
         return (bubbleXVelocity, bubbleYVelocity)
     }
     
+    func getBubbleDirection() -> CLLocationDirection {
+        return geographicBubbleSwipeHeading
+    }
+    
     func locationManager(manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
-        print("Mag Heading: \(newHeading.magneticHeading)")
-        print("True Heading: \(newHeading.trueHeading)")
+        
+        // midpoint to mid-top line for relative 0 degrees
+        // SOHCAHTOA to find angle offset
+        // constant rotating of UIImageView to indicate true north
+        
+//        print("True Heading: \(newHeading.trueHeading)")
+        
+        trueNorth = newHeading.trueHeading
+        geographicBubbleSwipeHeading = CLLocationDirection (atan(bubbleXVelocity / bubbleYVelocity))
+        
+//        print("Bubble Direction: \(newHeading.trueHeading - bubbleSwipeHeading)")
+//        image.frame = CGRect(x: image.frame.origin.x, y: image.frame.origin.y, width: imageWidth, height: imageHeight, orientation: trueNorthOrientation)
+//        image.image?. = UIImageOrientation.init(rawValue: Int (trueNorthOrientation))
+        
+//        image.image?.imageOrientation = trueNorthOrientation
+        
+        // return geographic heading of swipe
     }
 }

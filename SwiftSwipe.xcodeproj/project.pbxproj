@@ -12,8 +12,8 @@
 		6F12044D1C33484F0036761E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6F12044B1C33484F0036761E /* Main.storyboard */; };
 		6F12044F1C33484F0036761E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6F12044E1C33484F0036761E /* Assets.xcassets */; };
 		6F1204521C33484F0036761E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6F1204501C33484F0036761E /* LaunchScreen.storyboard */; };
-		6F12045A1C334D9F0036761E /* pointerCircle.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F1204591C334D9F0036761E /* pointerCircle.png */; settings = {ASSET_TAGS = (); }; };
-		6F1204681C33BDC90036761E /* SuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F1204671C33BDC90036761E /* SuccessViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		6F12045A1C334D9F0036761E /* pointerCircle.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F1204591C334D9F0036761E /* pointerCircle.png */; };
+		6F1204681C33BDC90036761E /* SuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F1204671C33BDC90036761E /* SuccessViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -101,6 +101,7 @@
 				TargetAttributes = {
 					6F1204431C33484F0036761E = {
 						CreatedOnToolsVersion = 7.0.1;
+						DevelopmentTeam = JKMGFXJ594;
 					};
 				};
 			};
@@ -256,6 +257,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = SwiftSwipe/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = edu.duke.scottyshaw.SwiftSwipe;
@@ -267,6 +269,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = SwiftSwipe/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = edu.duke.scottyshaw.SwiftSwipe;
@@ -293,6 +296,7 @@
 				6F1204581C33484F0036761E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
